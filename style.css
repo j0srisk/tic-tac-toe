@@ -25,3 +25,15 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.win {
+    transition: 2s;
+    background-color: greenyellow;
+    transform: scale(1.1);
+}
+
+.lose {
+    transition: 2s;
+    background-color: orangered;
+    transform: scale(1.1);
+}
