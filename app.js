@@ -16,14 +16,19 @@ const displayController = (() => {
     };
 
     const renderWinner = () => {
-        gameFlow.getWinningCombo().forEach(element => document.querySelector(`[index='${element}']`).className += " win");
+        if (gameFlow.getWinner().name === 'User') {
+            gameFlow.getWinningCombo().forEach(element => document.querySelector(`[index='${element}']`).className += " win");
+            document.querySelector('.game-text').textContent = "You Win!";
+        } else if (gameFlow.getWinner().name === 'Program') {
+            gameFlow.getWinningCombo().forEach(element => document.querySelector(`[index='${element}']`).className += " lose");
+            document.querySelector('.game-text').textContent = "You Lose!";
+        } else if (gameFlow.getWinner() === 'Tie') {
+            document.querySelector('.game-text').textContent = "Tie!";
+        }
+        
     };
 
-    const renderLoser = () => {
-        gameFlow.getWinningCombo().forEach(element => document.querySelector(`[index='${element}']`).className += " lose");
-    };
-
-    return ({ render, renderWinner, renderLoser });
+    return ({ render, renderWinner });
 })();
 
 const gameFlow = (() => {
@@ -73,6 +78,7 @@ const gameFlow = (() => {
     const checkWinner = () => {
         if (gameBoard.getBoard().includes("") === false) {
             winner = "Tie";
+            displayController.renderWinner();
         };
     
         winningCombinations.forEach(winningCombination => {
@@ -81,19 +87,20 @@ const gameFlow = (() => {
                     winningCombo = winningCombination;
                     if (gameBoard.getBoard()[winningCombination[0]] === 'X') {
                         winner = user;
-                        displayController.renderWinner();
                     } else {
                         winner = program;
-                        displayController.renderLoser();
                     }
+
+                    displayController.renderWinner();
                 }
             }
         });
     };
 
     const getWinningCombo = () => winningCombo;
+    const getWinner = () => winner;
 
-    return ({ startGame , userTurn, getWinningCombo });
+    return ({ startGame , userTurn, getWinningCombo, getWinner });
 })();
 
 gameFlow.startGame();
